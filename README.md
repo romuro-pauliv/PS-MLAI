@@ -44,9 +44,9 @@ By using this framework, you will have access to three useful features for your 
 | Config | Set project variables, such as batch size and dataset split, facilitating variable changes for testing | [config/config_files.py](/app/config/config_files.py) |
 | Bin | Data serialization to serve as a cache or to free up memory | [resources/bin_manager.py](/app/resources/bin_manager.py) |
 
-### Logs
+### (1) Logs
 
-Ao utilizar um log do `genlog` conseguiremos monitorar o processo executado. Para implementa-lo, um exemplo:
+By using a log from `genlog`, we can monitor the executed process. To implement it, consider the following example:
 
 ```python
 from resources.genlog import genlog
@@ -68,7 +68,7 @@ The response will be:
 
 Above, we implemented a log entry for when an SVM model is executed. For more information on how to implement logging, read [link here]().
 
-### Config
+### (2) Config
 
 The config feature centralizes your project variables in one place. To implement this, follow these steps:
 
@@ -100,3 +100,30 @@ df_tsne: np.ndarray = TSNE(tsne_dimensions)
 To access these variables in your project, use `configfiles.dot_ini["name of the .ini file (without extension)"]["main key"]["variable"]`.
 
 You can create numerous `.ini` files to organize your variables. For more information on configuration files, read [link here]().
+
+### (3) Bin
+
+File serialization serves to avoid unnecessary reprocessing or to free up virtual memory in extreme cases. An example of its use to prevent reprocessing:
+
+```python
+from resources.bin_manager import BinManager
+
+bin_manager = BinManager()
+
+df_normalized: pd.DataFrame = NormalizationTakes2Long(df)
+bin_manager.post("df_normalized", df_normalized)
+```
+
+In the example above, the pandas DataFrame will be saved to a `.bin` file in `app/bin/`. This way, you can retrieve the file if you need to reprocess your model.
+
+```python
+from resources.bin_manager import BinManager
+
+bin_manager = BinManager()
+
+#df_normalized: pd.DataFrame = NormalizationTakes2Long(df)
+#bin_manager.post("df_normalized", df_normalized)
+df_normalized: pd.DataFrame = bin_manager.get("df_normalized")
+```
+
+This approach is useful when no changes have been made prior to the data serialization. If any changes have been made, you will need to reprocess everything again.
