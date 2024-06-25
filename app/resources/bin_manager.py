@@ -11,7 +11,7 @@ import os
 from pathlib    import PosixPath, Path
 from typing     import Any
 
-from config.config_files    import configfiles
+from config.config_vars     import ConfigPath, ConfigExtension
 from log.genlog             import genlog
 # |--------------------------------------------------------------------------------------------------------------------|
 
@@ -24,9 +24,9 @@ class BinManager(object):
         This sets the path for the binary files and ensures that 
         the directory exists by creating it if necessary.
         """
-        self.path       : PosixPath     = Path(configfiles.dot_ini['paths']['posixpath']['ser_data'])
+        self.path       : PosixPath     = ConfigPath.BIN
         self.sub_path   : str           = str(self.path).split("/")[-1]
-        self.ext        : str           = configfiles.dot_ini['paths']['ext']['serialization']
+        self.ext        : str           = ConfigExtension.BIN
         self._create_bin_dir()
                 
     def _create_bin_dir(self) -> None:
@@ -36,7 +36,7 @@ class BinManager(object):
         This method ensures that the directory specified by `self.path` is 
         created. If the directory already exists, no action is taken.
         """
-        if self.sub_path not in os.listdir(configfiles.dot_ini['paths']['posixpath']['root']):
+        if self.sub_path not in os.listdir(ConfigPath.ROOT):
             os.mkdir(self.path)
             genlog.log(True, self.path, True)
             return None

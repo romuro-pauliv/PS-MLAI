@@ -11,7 +11,7 @@ from pathlib    import PosixPath, Path
 import pandas   as pd
 
 from resources.bin_manager  import BinManager
-from config.config_files    import configfiles
+from config.config_vars     import ConfigPath, ConfigExtension
 from log.genlog             import genlog
 # |--------------------------------------------------------------------------------------------------------------------|
 
@@ -30,8 +30,8 @@ class ReadARFF(object):
         This sets the root path for ARFF files and the file extension,
         and initializes a BinManager instance for managing binary file caching.
         """
-        self.root_path  : PosixPath = Path(configfiles.dot_ini['paths']['posixpath']['ext_data'])
-        self.ext        : str       = Path(configfiles.dot_ini['paths']['ext']['external_data'])
+        self.root_path  : PosixPath = ConfigPath.DATA
+        self.ext        : str       = ConfigExtension.DATA
         
         self.BinManager: BinManager = BinManager()
     
