@@ -1,6 +1,6 @@
 # PS-MLAI
 
-Basic framework for complex machine learning/AI projects. 
+Basic template for complex machine learning/AI projects. 
 
 ---
 
